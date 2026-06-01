@@ -1,0 +1,39 @@
+const http = require("http");
+const os = require("os");
+let count = 0;
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/") {
+    count++;
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Node.js App Running on Kubernetes</title>
+        <style>
+          body { font-family: sans-serif; background-color: #f3f4f6; color: #1f2937; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+          .card { background: #ffffff; width: 100%; max-width: 650px; margin: 0 auto; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+          h1 { color: #1d4ed8; font-size: 2rem; font-weight: 700; margin-bottom: 24px; }
+          p { font-size: 1.1rem; margin: 16px 0; color: #374151; }
+          .highlight { color: #111827; font-weight: bold; background: #e5e7eb; padding: 4px 8px; border-radius: 4px; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>🚀 Node.js App Running on Kubernetes</h1>
+          <p><b>Current Timestamp:</b> <span class="highlight">${new Date().toISOString()}</span></p>
+          <p><b>Container ID / Hostname:</b> <span class="highlight">${os.hostname()}</span></p>
+          <p><b>Total Visitors:</b> <span class="highlight">${count}</span></p>
+        </div>
+      </body>
+      </html>
+    `);
+  } else {
+    res.writeHead(404);
+    res.end();
+  }
+});
+
+server.listen(3000, "0.0.0.0");
